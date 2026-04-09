@@ -5,6 +5,7 @@ include 'connection.php';
 $username = $_POST['username'];
 $password = $_POST['password'];
 $role = $_POST['role'];
+//  test here
 
 $sql = "SELECT * FROM users WHERE username='$username' AND password='$password' AND role='$role'";
 $result = $db->query($sql);
