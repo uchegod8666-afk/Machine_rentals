@@ -17,9 +17,9 @@ $result = $db->query($sql);
     </tr>
     <?php while ($row = $result->fetch_assoc()) { ?>
     <tr>
-        <td><?php echo $row['machine_name']; ?></td>
+        <td><?php echo $row['name']; ?></td>
         <td><?php echo $row['serial_number']; ?></td>
-        <td><?php echo $row['Condition_status']; ?></td>
+        <td><?php echo $row['condition_status']; ?></td>
         <td><?php echo $row['quantity']; ?></td>
 
         <td>
@@ -28,3 +28,8 @@ $result = $db->query($sql);
     </tr>
     <?php } ?>
 </table>
+
+<a href="rented_items.php">All Rented items</a>
+<div>
+    <a href="index.html">Logout</a>
+</div>

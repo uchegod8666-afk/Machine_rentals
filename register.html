@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-10">
+
+    <div class="w-full max-w-md">
+
+        <div class="text-center mb-8">
+            <div class="w-14 h-14 bg-emerald-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                    <path d="M2 17l10 5 10-5"/>
+                    <path d="M2 12l10 5 10-5"/>
+                </svg>
+            </div>
+            <p class="text-xs font-semibold tracking-widest text-emerald-700 uppercase mb-1">Uche Rentals</p>
+            <h1 class="text-2xl font-semibold text-gray-800">Create your account</h1>
+            <p class="text-sm text-gray-500 mt-1">Access industrial cleaning machine for rentals</p>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-2xl p-8">
+            <form action="register.php" method="post" class="space-y-5">
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-1.5">Full name</label>
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="e.g. Uchenna Okafor"
+                        required
+                        class="w-full h-10 px-3 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
+                    >
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-1.5">Username</label>
+                    <input
+                        type="text"
+                        name="username"
+                        placeholder="e.g. Uokafor15"
+                        required
+                        class="w-full h-10 px-3 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
+                    >
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-1.5">Email address</label>
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="you@example.com"
+                        required
+                        class="w-full h-10 px-3 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
+                    >
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-1.5">Password</label>
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder=""
+                        required
+                        class="w-full h-10 px-3 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
+                    >
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-1.5">Account type</label>
+                    <select
+                        name="role"
+                        class="w-full h-10 px-3 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition cursor-pointer appearance-none"
+                    >
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+
+                <button
+                    type="submit"
+                    class="w-full h-11 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-sm font-medium rounded-lg transition-all duration-150 mt-2"
+                >
+                    Create account
+                </button>
+
+            </form>
+        </div>
+
+        <p class="text-center text-sm text-gray-500 mt-5">
+            Already have an account?
+            <a href="index.html" class="text-emerald-700 font-medium hover:underline">Sign in</a>
+        </p>
+
+    </div>
+
+</body>
+</html>
