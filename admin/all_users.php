@@ -52,6 +52,7 @@ while ($row = $result->fetch_assoc()) {
                             <th class="py-4 px-6 text-left">Email</th>
                             <th class="py-4 px-6 text-left">Username</th>
                             <th class="py-4 px-6 text-left">Role</th>
+                            <th class="py-4 px-6 text-left">Action</th>
                         </tr>
                     </thead>
 
@@ -83,6 +84,11 @@ while ($row = $result->fetch_assoc()) {
                                         : 'bg-green-100 text-green-600' ?>">
                                     <?= htmlspecialchars($row['role']) ?>
                                 </span>
+                            </td>
+
+                             <td class="py-4 px-6 flex gap-x-4">
+                                <a href="edit-user.php?id=<?= $row['user_id'];  ?>" class="bg-blue-600 text-white py-1 rounded-md px-2 text-sm font-medium">Edit</a>
+                                <a href="delete-user.php?id=<?= $row['user_id'];  ?>" class="bg-red-600 text-white py-1 px-2 text-sm font-medium rounded-md">Delete</a>
                             </td>
 
                         </tr>

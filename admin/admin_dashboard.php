@@ -44,6 +44,11 @@
             </div>
 
         </div>
+        <br><br>
+            <a href="index.html"
+               class="bg-blue-600 text-white px-5 py-2 rounded-lg shadow hover:bg-blue-700 transition">
+               Logout
+            </a>
 
     </div>
 

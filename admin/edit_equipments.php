@@ -2,12 +2,31 @@
 session_start();
 include '../connection.php';
 
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-    header("Location: ../index.php");
-    exit();
-}
+$machineId = intval($_GET['id']);
 
-$result = $db->query("SELECT * FROM machines");
+$stmt = $db->prepare("SELECT * FROM machines WHERE machine_id = ? LIMIT 1");
+$stmt->bind_param("i", $machineId);
+$stmt->execute();
+$result = $stmt->get_result();
+$data = $result->fetch_assoc();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name     = $_POST['machine_name'];
+    $serial   = $_POST['serial_number'];
+    $status   = $_POST['Condition_status'];
+    $quantity = intval($_POST['quantity']);
+
+    $updateSql  = "UPDATE machines SET name = ?, serial_number = ?, condition_status = ?, quantity = ? WHERE machine_id = ?";
+    $updateStmt = $db->prepare($updateSql);
+    $updateStmt->bind_param("sssii", $name, $serial, $status, $quantity, $machineId);
+
+    if ($updateStmt->execute()) {
+        header("Location: equipments.php?success=1");
+        exit();
+    } else {
+        $error = "Update failed. Please try again.";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -15,69 +34,64 @@ $result = $db->query("SELECT * FROM machines");
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Tools</title>
+    <title>Edit Machine</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen p-6">
+<body class="bg-gradient-to-br from-gray-100 to-gray-200 min-h-screen flex items-center justify-center font-sans">
 
-    <div class="max-w-6xl mx-auto">
-        <!-- Header -->
-        <div class="mb-6">
-            <h2 class="text-3xl font-bold text-gray-800">Edit Equipments</h2>
-            <p class="text-gray-500 mt-1">Manage and update the tools available in your rental inventory.</p>
+    <div class="bg-white shadow-2xl rounded-2xl w-full max-w-lg p-8 border border-gray-200">
+
+        <div class="mb-6 text-center">
+            <h1 class="text-2xl font-bold text-gray-800">⚙️ Edit Equipments</h1>
+            <p class="text-sm text-gray-500">Edit the equipments from our system.</p>
         </div>
 
-        <!-- Table Card -->
-        <div class="bg-white shadow-md rounded-2xl overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="min-w-full text-sm text-left text-gray-600">
-                    <thead class="bg-gray-800 text-white uppercase text-xs tracking-wider">
-                        <tr>
-                            <th class="px-6 py-4">ID</th>
-                            <th class="px-6 py-4">Name</th>
-                            <th class="px-6 py-4">Serial Number</th>
-                            <th class="px-6 py-4">Condition</th>
-                            <th class="px-6 py-4">Quantity</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200">
-                        <?php while ($row = $result->fetch_assoc()) { ?>
-                        <tr class="hover:bg-gray-50 transition">
-                           <td class="px-6 py-4 font-medium text-gray-800">
-    <?= $row['machine_id']; ?>
-</td>
+        <?php if (isset($error)): ?>
+            <div class="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm"><?= $error ?></div>
+        <?php endif; ?>
 
-<td class="px-6 py-4">
-    <?= $row['machine_name']; ?>
-</td>
+        <form method="post" class="space-y-5">
 
-<td class="px-6 py-4">
-    <?= $row['serial_number']; ?>
-</td>
-
-<td class="px-6 py-4">
-    <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full
-        <?= $row['condition_status'] == 'available' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'; ?>">
-        <?= ucfirst($row['condition_status']); ?>
-    </span>
-</td>
-
-<td class="px-6 py-4 space-x-2">
-    <a href="edit_tool.php?id=<?= $row['machine_id']; ?>" class="bg-yellow-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-yellow-600">
-        Edit
-    </a>
-
-    <a href="delete_tool.php?id=<?= $row['machine_id']; ?>" class="bg-red-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-600"
-       onclick="return confirm('Delete this machine?');">
-        Delete
-    </a>
-</td>
-                        </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Machine name</label>
+                <input type="text" name="machine_name" required
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    placeholder="e.g. Industrial Vacuum Cleaner"
+                    value="<?= htmlspecialchars($data['name']) ?>">
             </div>
-        </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Serial number</label>
+                <input type="text" name="serial_number" required
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    placeholder="Enter serial number"
+                    value="<?= htmlspecialchars($data['serial_number']) ?>">
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Condition status</label>
+                <select name="Condition_status"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <option value="available" <?= $data['condition_status'] === 'available' ? 'selected' : '' ?>>Available</option>
+                    <option value="rented"    <?= $data['condition_status'] === 'rented'    ? 'selected' : '' ?>>Rented</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Quantity</label>
+                <input type="number" name="quantity"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    placeholder="Enter quantity"
+                    value="<?= htmlspecialchars($data['quantity']) ?>">
+            </div>
+
+            <button type="submit"
+                class="w-full bg-blue-700 text-white py-3 rounded-lg font-semibold hover:bg-blue-800 transition duration-200 shadow-md">
+                Save changes
+            </button>
+
+        </form>
+
     </div>
 
 </body>

@@ -32,7 +32,7 @@ while ($row = $result->fetch_assoc()) {
         <td colspan="5">No rented machines found.</td>
     </tr>
     <?php else: ?>
-    <?php foreach ($datas as $row): ?>  <!-- use foreach over $datas, not $result -->
+    <?php foreach ($datas as $row): ?>  
 
     <tr>
         <td><?= $row['name']; ?></td>

@@ -1,5 +1,7 @@
 <?php
 include '../connection.php';
+$report = "";
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 $name = $_POST['machine_name'];
 $serialNo = $_POST['serial_number'];
@@ -10,9 +12,9 @@ $sql = "INSERT INTO machines (name, serial_number, condition_status, quantity)
            VALUES ('$name', '$serialNo', '$status', '$quantity')";
 
     if ($db->query($sql) === TRUE) {
-        echo "Equipment added successfully";
+        $report = "Equipment added successfully";
     } else {
-        echo "Error:" .$db->error;
+        $report = "Error:" .$db->error;
     }
 }
 ?>
@@ -32,6 +34,9 @@ $sql = "INSERT INTO machines (name, serial_number, condition_status, quantity)
         <div class="mb-6 text-center">
             <h1 class="text-2xl font-bold text-gray-800">⚙️ Add New Machine</h1>
             <p class="text-sm text-gray-500">Register industrial cleaning equipment</p>
+        </div>
+        <div>
+            <?php echo $report; ?>
         </div>
 
         <form method="post" class="space-y-5">

@@ -4,24 +4,25 @@ include 'connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $user_id = $_SESSION['user_id']; // make sure user is logged in
-    $machine_id = $_POST['machine_id'];
-    $start_date = $_POST['rent_date'];
-    $end_date = $_POST['return_date'];
+    if (!isset($_SESSION['user_id'])) {
+        die("User not logged in.");
+    }
 
-    // Check machine availability
+    $user_id    = $_SESSION['user_id']; 
+    $machine_id = $_POST['machine_id'];
+    $rent_date  = $_POST['rent_date'];
+    $return_date = $_POST['return_date'];
+
     $check = $db->query("SELECT quantity FROM machines WHERE machine_id = $machine_id");
     $machine = $check->fetch_assoc();
 
-    if ($machine['quantity'] > 0) {
+    if ($machine && $machine['quantity'] > 0) {
 
-        // Insert rental
-        $sql = "INSERT INTO rentals (user_id, machine_id, start_date, end_date)
-                VALUES ('$user_id', '$machine_id', '$rent_date', '$return_date')";
+        $sql = "INSERT INTO rentals (machine_id, user_id, rent_date, return_date)
+                VALUES ('$machine_id', '$user_id', '$rent_date', '$return_date')";
 
         if ($db->query($sql)) {
 
-            // Reduce quantity
             $db->query("UPDATE machines SET quantity = quantity - 1 WHERE machine_id = $machine_id");
 
             echo "✅ Machine rented successfully!";
@@ -34,3 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
+<br><br>
+<a href="user_dashboard.php"
+           class="text-red-600 font-medium hover:underline">
+           Back to rental page
+</a>
